@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy:gh": "ng build --prod --base-href=https://fahadkhan174.github.io/angular/ && ngh --dir dist/Angular"
+    "deploy:gh": "ng build --prod --base-href=https://fahadkhan174.github.io/angular/ && ngh --dir dist/Angular",
+    "deploy:fb": "ng build --prod && firebase deploy"
   },
   "private": true,
   "dependencies": {
@@ -16,10 +17,14 @@
     "@angular/common": "~8.0.0",
     "@angular/compiler": "~8.0.0",
     "@angular/core": "~8.0.0",
+    "@angular/fire": "^5.2.1",
     "@angular/forms": "~8.0.0",
     "@angular/platform-browser": "~8.0.0",
     "@angular/platform-browser-dynamic": "~8.0.0",
     "@angular/router": "~8.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
+    "bootstrap": "^4.3.1",
+    "firebase": "^6.2.4",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
