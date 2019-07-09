@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
-import { map } from 'rxjs/operators';
 import { AppUser } from './models/app-user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  appUser: AppUser;
 
   constructor(private afDatabase: AngularFirestore) {
   }
@@ -22,10 +19,6 @@ export class UserService {
   }
 
   get(uid: string) {
-    return this.afDatabase.collection('users').doc(uid).get().pipe(
-      map(doc => {
-        return (doc.data());
-      })
-    );
+    return this.afDatabase.collection('users').doc<AppUser>(uid).valueChanges();
   }
 }
