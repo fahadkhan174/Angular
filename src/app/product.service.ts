@@ -5,12 +5,17 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class ProductService {
 
-  constructor(private afStore: AngularFirestore) { }
+  constructor(private afStore: AngularFirestore) {
+  }
 
-  getCategories() {
-    return this.afStore.collection('categories', ref => ref.orderBy('name', 'asc'))
+  create(product) {
+    return this.afStore.collection('products').add(product);
+  }
+
+  getAll() {
+    return this.afStore.collection('products')
       .snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {

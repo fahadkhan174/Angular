@@ -8,17 +8,17 @@ import { AppUser } from './models/app-user';
 })
 export class UserService {
 
-  constructor(private afDatabase: AngularFirestore) {
+  constructor(private afStore: AngularFirestore) {
   }
 
   save(user: firebase.User) {
-    this.afDatabase.collection('users').doc(user.uid).set({
+    this.afStore.collection('users').doc(user.uid).set({
       name: user.displayName,
       email: user.email
     }, { merge: true });
   }
 
   get(uid: string) {
-    return this.afDatabase.collection('users').doc<AppUser>(uid).valueChanges();
+    return this.afStore.collection('users').doc<AppUser>(uid).valueChanges();
   }
 }
