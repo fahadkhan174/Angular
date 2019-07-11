@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { Product } from './models/product';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class ProductService {
   }
 
   getAll() {
-    return this.afStore.collection('products')
+    return this.afStore.collection<Product>('products')
       .snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
@@ -24,5 +25,17 @@ export class ProductService {
           return { id, ...data };
         }))
       );
+  }
+
+  get(productId) {
+    return this.afStore.collection('products').doc(productId).valueChanges();
+  }
+
+  update(productId, product) {
+    return this.afStore.collection('products').doc(productId).update(product);
+  }
+
+  delete(productId) {
+    return this.afStore.collection('products').doc(productId).delete();
   }
 }
