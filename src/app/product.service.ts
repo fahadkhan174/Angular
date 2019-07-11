@@ -28,7 +28,7 @@ export class ProductService {
   }
 
   get(productId) {
-    return this.afStore.collection('products').doc(productId).valueChanges();
+    return this.afStore.collection('products').doc<Product>(productId).valueChanges();
   }
 
   update(productId, product) {
