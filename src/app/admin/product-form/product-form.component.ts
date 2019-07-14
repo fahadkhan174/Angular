@@ -13,7 +13,7 @@ import { Product } from 'src/app/models/product';
 })
 export class ProductFormComponent implements OnInit {
   categories$;
-  product: Product;
+  product = {};
   productId;
 
   constructor(
@@ -21,7 +21,7 @@ export class ProductFormComponent implements OnInit {
     private categoryService: CategoryService,
     private productService: ProductService,
     private route: ActivatedRoute) {
-    this.categories$ = this.categoryService.getCategories();
+    this.categories$ = this.categoryService.getAll();
 
     this.productId = this.route.snapshot.paramMap.get('id');
     if (this.productId) {

@@ -9,7 +9,7 @@ export class CategoryService {
 
   constructor(private afStore: AngularFirestore) { }
 
-  getCategories() {
+  getAll() {
     return this.afStore.collection('categories', ref => ref.orderBy('name', 'asc'))
       .snapshotChanges()
       .pipe(

@@ -12,7 +12,11 @@ export class ProductService {
   }
 
   create(product) {
-    return this.afStore.collection('products').add(product);
+    return this.afStore.collection('products').add(product)
+      .then(ref => {
+        product.id = ref.id;
+        return this.afStore.collection('products').doc(ref.id).update(product);
+      });
   }
 
   getAll() {
