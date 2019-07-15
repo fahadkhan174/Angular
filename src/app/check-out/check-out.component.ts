@@ -6,7 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./check-out.component.css']
 })
 export class CheckOutComponent implements OnInit {
-  shipping = {};
+  shipping: {
+    name: string,
+    addressLine1: string,
+    addressLine2: string,
+    city: string
+  };
 
   constructor() { }
 
