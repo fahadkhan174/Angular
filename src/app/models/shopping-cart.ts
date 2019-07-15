@@ -4,7 +4,7 @@ import { Product } from './product';
 export class ShoppingCart {
     items: ShoppingCartItem[] = [];
 
-    constructor(public id: string, public data) {
+    constructor(private id: string, private data) {
         data.forEach(item => {
             this.items.push(new ShoppingCartItem(item.id, item.product, item.quantity));
         });

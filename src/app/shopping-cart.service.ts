@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Product } from './models/product';
 import { take, map } from 'rxjs/operators';
-import { ShoppingCartItem } from './models/shopping-cart-item';
 import { ShoppingCart } from './models/shopping-cart';
-import { Observable, from } from 'rxjs';
-import { concatMap, delay, mergeMap } from 'rxjs/operators';
+import { ShoppingCartItem } from './models/shopping-cart-item';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +14,27 @@ export class ShoppingCartService {
 
   async getCart() {
     let cartId = await this.getOrCreateCartId();
-    return this.afStore.collection<ShoppingCart>('shopping-carts').doc(cartId).collection('items')
+    return this.afStore.collection<ShoppingCart>('shopping-carts').doc(cartId).collection<ShoppingCartItem>('items')
       .valueChanges()
       .pipe(
         map(data => {
           return new ShoppingCart(cartId, data);
         })
       );
+
+    // .snapshotChanges()
+    // .pipe(
+    //   map(actions => actions.map(a => {
+    //     const data = a.payload.doc.data();
+    //     const id = a.payload.doc.id;
+    //     return { id, ...data };
+    //   }))
+    // ).pipe(
+    //   map(data => {
+    //     return new ShoppingCart(cartId, data);
+    //   })
+    // );
+
   }
 
   async addToCart(product: Product) {
@@ -35,21 +47,23 @@ export class ShoppingCartService {
 
   async clearCart() {
     let cartId = await this.getOrCreateCartId();
-    this.afStore.collection('shopping-carts').doc(cartId).collection('items')
-      .snapshotChanges()
+    this.afStore.collection('shopping-carts').doc(cartId).collection('items').stateChanges()
       .pipe(
         map(actions => actions.map(a => {
           const id = a.payload.doc.id;
-          return { id };
+          return id;
         }))
-      ).subscribe(ids => {
+      )
+      .subscribe((ids) => {
         ids.forEach(item => {
-          this.afStore.collection('shopping-carts').doc(cartId).collection('items').doc(item.id).delete();
+          let item$ = this.getItem(cartId, item);
+          item$.snapshotChanges().subscribe(item => {
+            item$.delete();
+          });
         })
-        this.afStore.collection('shopping-carts').doc(cartId).delete();
       });
     localStorage.removeItem('cartId');
-
+    await this.getCart();
   }
 
   private createCart() {
